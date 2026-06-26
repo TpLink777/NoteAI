@@ -109,7 +109,7 @@ class AuthController extends Controller
             ]);
 
             //! en send se le pasa el correo del usuario y se le envia el codigo de verificacion mediante el correo
-            Mail::to($request->email)->queue(new OtpMail($code));
+            Mail::to($request->email)->send(new OtpMail($code));
 
             return redirect()->route('otp.form');
         } catch (\Exception $e) {
@@ -177,7 +177,7 @@ class AuthController extends Controller
                 $pendingUser['otp_code'] = $newCode;
                 $pendingUser['otp_expires_at'] = now()->addMinutes(10)->toDateTimeString();
                 session(['pending_user' => $pendingUser]);
-                Mail::to($pendingUser['email'])->queue(new OtpMail($newCode));
+                Mail::to($pendingUser['email'])->send(new OtpMail($newCode));
             } elseif (session()->has('pending_forgot_password')) {
 
                 $newCode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
@@ -185,7 +185,7 @@ class AuthController extends Controller
                 $pendingForgot['otp_code'] = $newCode;
                 $pendingForgot['otp_expires_at'] = now()->addMinutes(10)->toDateTimeString();
                 session(['pending_forgot_password' => $pendingForgot]);
-                Mail::to($pendingForgot['email'])->queue(new OtpMail($newCode));
+                Mail::to($pendingForgot['email'])->send(new OtpMail($newCode));
             } else {
                 return redirect()->route('loginPage')->withErrors(['email' => 'La sesión expiró. Inténtalo de nuevo.']);
             }
@@ -264,7 +264,7 @@ class AuthController extends Controller
             ]);
 
             //! en send se le pasa el correo del usuario y se le envia el codigo de verificacion mediante el correo
-            Mail::to($request->email)->queue(new OtpMail($code));
+            Mail::to($request->email)->send(new OtpMail($code));
 
             return redirect()->route('otp.form.pass');
         } catch (\Exception $e) {
