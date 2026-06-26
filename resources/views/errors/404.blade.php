@@ -1,8 +1,8 @@
 <x-layouts.minimal title="Página no encontrada">
 
-    <div class="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 overflow-hidden relative">
+    <div class="flex items-center justify-center min-h-screen bg-linear-to-br from-slate-900 via-slate-900 to-slate-800 overflow-hidden relative">
 
-        {{-- Subtle geometric pattern --}}
+
         <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 0); background-size: 40px 40px;"></div>
 
         <div class="relative z-10 text-center px-6 animate-slide-up">
