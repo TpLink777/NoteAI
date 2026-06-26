@@ -65,7 +65,13 @@ class AuthController extends Controller
                     "email_verified_at" => now()->format("Y-m-d H:i:s"),
                     "password" => Hash::make(Str::random(10)),
                 ]
-            )->assignRole('user');
+            );
+
+            if (!$user->hasRole('user')) {
+                $user->assignRole('user');
+            }
+
+            $user->refresh();
 
             Auth::login($user);
 
@@ -172,7 +178,6 @@ class AuthController extends Controller
                 $pendingUser['otp_expires_at'] = now()->addMinutes(10)->toDateTimeString();
                 session(['pending_user' => $pendingUser]);
                 Mail::to($pendingUser['email'])->send(new OtpMail($newCode));
-
             } elseif (session()->has('pending_forgot_password')) {
 
                 $newCode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
@@ -181,7 +186,6 @@ class AuthController extends Controller
                 $pendingForgot['otp_expires_at'] = now()->addMinutes(10)->toDateTimeString();
                 session(['pending_forgot_password' => $pendingForgot]);
                 Mail::to($pendingForgot['email'])->send(new OtpMail($newCode));
-
             } else {
                 return redirect()->route('loginPage')->withErrors(['email' => 'La sesión expiró. Inténtalo de nuevo.']);
             }
